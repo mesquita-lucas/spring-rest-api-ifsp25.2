@@ -9,7 +9,7 @@ public record ConsertoResponse(
         String veiculoMarca,
         String veiculoModelo,
         String veiculoAno,
-        String veiculoCor
+        Boolean ativo
 ) {
     public static ConsertoResponse fromEntity(Conserto c) {
         return new ConsertoResponse(
@@ -21,7 +21,7 @@ public record ConsertoResponse(
                 c.getVeiculoMarca(),
                 c.getVeiculoModelo(),
                 c.getVeiculoAno(),
-                c.getVeiculoCor()
+                c.getAtivo()
         );
     }
 }
