@@ -5,7 +5,7 @@ public record ConsertoResponse(
         String dataEntrada,
         String dataSaida,
         String mecanicoNome,
-        Integer mecanicoAnosExperiencia,
+        String mecanicoAnosExperiencia,
         String veiculoMarca,
         String veiculoModelo,
         String veiculoAno,
@@ -16,12 +16,12 @@ public record ConsertoResponse(
                 c.getId(),
                 c.getDataEntrada(),
                 c.getDataSaida(),
-                c.getMecanicoNome(),
-                c.getMecanicoAnosExperiencia(),
-                c.getVeiculoMarca(),
-                c.getVeiculoModelo(),
-                c.getVeiculoAno(),
-                c.getVeiculoCor()
+                c.getMecanico().getNome(),
+                c.getMecanico().getAnosExperiencia(),
+                c.getVeiculo().getMarca(),
+                c.getVeiculo().getModelo(),
+                c.getVeiculo().getAno(),
+                c.getVeiculo().getCor()
         );
     }
 }
