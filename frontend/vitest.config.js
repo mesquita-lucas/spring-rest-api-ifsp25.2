@@ -8,6 +8,7 @@ export default defineConfig({
     environment: 'jsdom',
     setupFiles: './src/test/setup.js',
     css: true,
+    exclude: ['**/node_modules/**', '**/e2e/**', '**/dist/**'],
     coverage: {
       provider: 'v8',
       reporter: ['text', 'json', 'html'],
@@ -15,6 +16,7 @@ export default defineConfig({
         'node_modules/',
         'src/test/',
         '*.config.js',
+        'e2e/',
       ]
     }
   },

@@ -136,7 +136,7 @@ describe('Login Component - Unit Tests', () => {
   describe('Authentication', () => {
     it('should call authService.login with correct credentials', async () => {
       const user = userEvent.setup()
-      authService.login.mockReturnValue({ success: true, username: 'admin' })
+      authService.login.mockResolvedValue({ success: true, username: 'admin' })
 
       render(<Login onLogin={mockOnLogin} />)
 
@@ -152,7 +152,7 @@ describe('Login Component - Unit Tests', () => {
 
     it('should handle login success and call onLogin callback', async () => {
       const user = userEvent.setup()
-      authService.login.mockReturnValue({ success: true, username: 'user' })
+      authService.login.mockResolvedValue({ success: true, username: 'user' })
 
       render(<Login onLogin={mockOnLogin} />)
 
@@ -167,9 +167,7 @@ describe('Login Component - Unit Tests', () => {
 
     it('should handle login error gracefully', async () => {
       const user = userEvent.setup()
-      authService.login.mockImplementation(() => {
-        throw new Error('Login failed')
-      })
+      authService.login.mockRejectedValue(new Error('Login failed'))
 
       render(<Login onLogin={mockOnLogin} />)
 
@@ -178,9 +176,54 @@ describe('Login Component - Unit Tests', () => {
       await user.click(screen.getByRole('button', { name: /entrar/i }))
 
       await waitFor(() => {
-        expect(screen.getByText(/erro ao fazer login/i)).toBeInTheDocument()
+        expect(screen.getByText(/login failed/i)).toBeInTheDocument()
       })
       expect(mockOnLogin).not.toHaveBeenCalled()
+    })
+
+    it('should show specific error for invalid credentials', async () => {
+      const user = userEvent.setup()
+      authService.login.mockRejectedValue(new Error('Usuário ou senha inválidos'))
+
+      render(<Login onLogin={mockOnLogin} />)
+
+      await user.type(screen.getByLabelText(/usuário/i), 'wronguser')
+      await user.type(screen.getByLabelText(/senha/i), 'wrongpass')
+      await user.click(screen.getByRole('button', { name: /entrar/i }))
+
+      await waitFor(() => {
+        expect(screen.getByText(/usuário ou senha inválidos/i)).toBeInTheDocument()
+      })
+      expect(mockOnLogin).not.toHaveBeenCalled()
+    })
+
+    it('should show loading state during authentication', async () => {
+      const user = userEvent.setup()
+      let resolveLogin
+      authService.login.mockReturnValue(new Promise((resolve) => {
+        resolveLogin = resolve
+      }))
+
+      render(<Login onLogin={mockOnLogin} />)
+
+      await user.type(screen.getByLabelText(/usuário/i), 'admin')
+      await user.type(screen.getByLabelText(/senha/i), 'admin123')
+      await user.click(screen.getByRole('button', { name: /entrar/i }))
+
+      // Should show loading state
+      await waitFor(() => {
+        expect(screen.getByText(/entrando/i)).toBeInTheDocument()
+      })
+
+      // Button should be disabled
+      expect(screen.getByRole('button', { name: /entrando/i })).toBeDisabled()
+
+      // Resolve the promise
+      resolveLogin({ success: true, username: 'admin' })
+
+      await waitFor(() => {
+        expect(mockOnLogin).toHaveBeenCalledWith('admin')
+      })
     })
   })
 
