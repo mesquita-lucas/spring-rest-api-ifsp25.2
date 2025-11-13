@@ -277,6 +277,47 @@ curl -u admin:admin123 -X POST http://localhost:8080/consertos \
 
 ---
 
+## 🌟 PLUS - Front-end em Desenvolvimento (Branch `dev`)
+
+### 💻 Interface Web Integrada
+
+Estamos desenvolvendo uma **interface web moderna** para facilitar a interação com a API! 
+
+**Recursos planejados:**
+- ✅ **Dashboard intuitivo** para visualização de consertos
+- ✅ **Formulários validados** para cadastro e edição
+- ✅ **Sistema de autenticação** integrado com Spring Security
+- ✅ **Filtros e busca avançada** por marca, modelo e período
+- ✅ **Design responsivo** (mobile-friendly)
+- ✅ **Feedback visual** para todas as operações (success/error)
+
+**Stack tecnológico do front-end:**
+- **React** ou **Vue.js** para interface dinâmica
+- **Axios** para integração com API REST
+- **TailwindCSS** ou **Material-UI** para estilização
+- **JWT (futuro)** para autenticação mais moderna
+
+### 📅 Cronograma
+
+**Próxima semana:**
+- Interface completa com todas as funcionalidades CRUD
+- Integração total com os endpoints da API
+- Tratamento de erros e validações no front-end
+- Deploy em branch `dev` para demonstração
+
+### 🎯 Objetivo
+
+Facilitar a **demonstração e avaliação** do projeto, oferecendo:
+1. Uma forma visual e intuitiva de testar todas as funcionalidades
+2. Validação prática da integração front-end + back-end
+3. Experiência de usuário completa (UX/UI)
+
+> 🚧 **Status:** Em desenvolvimento na branch `dev`  
+> 📅 **Previsão de entrega:** Próxima semana  
+> 🎯 **Disponibilidade para demonstração ao professor caso haja interesse**
+
+---
+
 ## 📝 Exemplos de Uso
 
 ### 1. Criar um conserto (como ADMIN)
