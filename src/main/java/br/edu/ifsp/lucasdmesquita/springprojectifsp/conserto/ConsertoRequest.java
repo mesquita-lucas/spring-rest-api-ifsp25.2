@@ -8,7 +8,7 @@ public record ConsertoRequest(
         @Pattern(regexp = "\\d{2}/\\d{2}/\\d{4}") String dataSaida,
 
         @NotBlank String mecanicoNome,
-        @NotBlank String mecanicoAnosExperiencia,
+        @NotBlank Integer mecanicoAnosExperiencia,
 
         @NotBlank String veiculoMarca,
         @NotBlank String veiculoModelo,

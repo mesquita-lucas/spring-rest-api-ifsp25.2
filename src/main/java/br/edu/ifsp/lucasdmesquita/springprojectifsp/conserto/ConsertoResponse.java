@@ -1,11 +1,13 @@
 package br.edu.ifsp.lucasdmesquita.springprojectifsp.conserto;
 
+import br.edu.ifsp.lucasdmesquita.springprojectifsp.conserto.Entity.Conserto;
+
 public record ConsertoResponse(
         Long id,
         String dataEntrada,
         String dataSaida,
         String mecanicoNome,
-        String mecanicoAnosExperiencia,
+        Integer mecanicoAnosExperiencia,
         String veiculoMarca,
         String veiculoModelo,
         String veiculoAno,

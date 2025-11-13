@@ -1,4 +1,4 @@
-package br.edu.ifsp.lucasdmesquita.springprojectifsp.conserto;
+package br.edu.ifsp.lucasdmesquita.springprojectifsp.conserto.Entity;
 
 import jakarta.persistence.Embeddable;
 import lombok.Getter;

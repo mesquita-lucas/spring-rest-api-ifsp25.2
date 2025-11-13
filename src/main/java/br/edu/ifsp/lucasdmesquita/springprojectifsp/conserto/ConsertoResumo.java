@@ -1,6 +1,9 @@
 package br.edu.ifsp.lucasdmesquita.springprojectifsp.conserto;
 
+import br.edu.ifsp.lucasdmesquita.springprojectifsp.conserto.Entity.Conserto;
+
 public record ConsertoResumo(
+        Long id,
         String dataEntrada,
         String dataSaida,
         String mecanicoNome,
@@ -9,6 +12,7 @@ public record ConsertoResumo(
 ) {
     public static ConsertoResumo fromEntity(Conserto c) {
         return new ConsertoResumo(
+                c.getId(),
                 c.getDataEntrada(),
                 c.getDataSaida(),
                 c.getMecanico().getNome(),
