@@ -1,0 +1,91 @@
+.login-container {
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+}
+
+.login-card {
+  background: white;
+  padding: 40px;
+  border-radius: 12px;
+  box-shadow: 0 10px 40px rgba(0,0,0,0.2);
+  width: 100%;
+  max-width: 400px;
+}
+
+.login-card h1 {
+  text-align: center;
+  color: #333;
+  margin-bottom: 10px;
+}
+
+.subtitle {
+  text-align: center;
+  color: #666;
+  margin-bottom: 30px;
+  font-size: 14px;
+}
+
+.form-group {
+  margin-bottom: 20px;
+}
+
+.form-group label {
+  display: block;
+  margin-bottom: 5px;
+  color: #333;
+  font-weight: 500;
+}
+
+.btn-login {
+  width: 100%;
+  background: #4CAF50;
+  color: white;
+  padding: 12px;
+  font-size: 16px;
+  font-weight: 600;
+  margin-top: 10px;
+}
+
+.error-message {
+  background: #ffebee;
+  color: #c62828;
+  padding: 10px;
+  border-radius: 4px;
+  margin: 10px 0;
+  text-align: center;
+}
+
+.quick-login {
+  margin-top: 30px;
+  padding-top: 20px;
+  border-top: 1px solid #eee;
+}
+
+.quick-login p {
+  text-align: center;
+  color: #666;
+  margin-bottom: 15px;
+  font-size: 14px;
+}
+
+.btn-quick {
+  width: 100%;
+  padding: 12px;
+  margin-bottom: 10px;
+  font-size: 14px;
+  font-weight: 500;
+  border-radius: 6px;
+}
+
+.btn-quick.admin {
+  background: #2196F3;
+  color: white;
+}
+
+.btn-quick.user {
+  background: #FF9800;
+  color: white;
+}

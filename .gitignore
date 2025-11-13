@@ -38,3 +38,8 @@ test-endpoints.bat
 
 ### Course Materials ###
 Documents/
+
+### Frontend ###
+frontend/node_modules/
+frontend/dist/
+frontend/.vite/
