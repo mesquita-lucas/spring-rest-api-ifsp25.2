@@ -7,6 +7,7 @@ import jakarta.validation.constraints.Size;
 public record ConsertoRequest(
 
         // Datas: apenas formato dd/mm/aaaa (não valida data real)
+        @NotBlank(message = "dataEntrada é obrigatória")
         @Pattern(regexp = "^(\\d{2})/(\\d{2})/(\\d{4})$",
                 message = "dataEntrada deve estar no formato dd/mm/aaaa")
         String dataEntrada,
@@ -33,5 +34,7 @@ public record ConsertoRequest(
 
         @NotBlank(message = "veiculoAno é obrigatório")
         @Pattern(regexp = "^\\d{4}$", message = "veiculoAno deve estar no formato aaaa")
-        String veiculoAno
+        String veiculoAno,
+        
+        String veiculoCor
 ) { }

@@ -19,7 +19,7 @@ public class Conserto {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    // Datas como String (avaliação pede apenas formato)
+    // Datas como String (avaliação pede apenas formato)
     @Column(name = "data_entrada", nullable = false, length = 10)
     private String dataEntrada;
 
@@ -43,6 +43,9 @@ public class Conserto {
     @Column(name = "veiculo_ano", nullable = false, length = 4)
     private String veiculoAno;
 
+    @Column(name = "veiculo_cor", length = 20)
+    private String veiculoCor;
+
     // Exclusão lógica
     @Default
     @Column(name = "ativo", nullable = false)
@@ -58,6 +61,7 @@ public class Conserto {
                 .veiculoMarca(dto.veiculoMarca())
                 .veiculoModelo(dto.veiculoModelo())
                 .veiculoAno(dto.veiculoAno())
+                .veiculoCor(dto.veiculoCor())
                 .ativo(Boolean.TRUE) // garante ativo=true na criação
                 .build();
     }

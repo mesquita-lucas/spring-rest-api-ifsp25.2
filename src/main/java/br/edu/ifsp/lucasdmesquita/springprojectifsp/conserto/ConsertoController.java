@@ -41,6 +41,53 @@ public class ConsertoController {
         return ResponseEntity.ok(page);
     }
 
+    // GET parcial com filtros — apenas registros ativos
+    @GetMapping(params = {"marca", "modelo"})
+    public ResponseEntity<Page<ConsertoResponse>> listarPorMarcaModelo(
+            @RequestParam String marca,
+            @RequestParam String modelo,
+            Pageable paginacao) {
+        Page<ConsertoResponse> page = repository
+                .findByVeiculoMarcaContainingIgnoreCaseAndVeiculoModeloContainingIgnoreCaseAndAtivoTrue(
+                        marca, modelo, paginacao)
+                .map(ConsertoResponse::fromEntity);
+        return ResponseEntity.ok(page);
+    }
+
+    // GET um conserto específico
+    @GetMapping("/{id}")
+    public ResponseEntity<ConsertoResponse> detalhar(@PathVariable Long id) {
+        var opt = repository.findByIdAndAtivoTrue(id);
+        if (opt.isEmpty()) {
+            return ResponseEntity.notFound().build();
+        }
+        return ResponseEntity.ok(ConsertoResponse.fromEntity(opt.get()));
+    }
+
+    // PUT — atualizar conserto
+    @PutMapping("/{id}")
+    @jakarta.transaction.Transactional
+    public ResponseEntity<ConsertoResponse> atualizar(@PathVariable Long id,
+                                                      @Valid @RequestBody ConsertoRequest request) {
+        var opt = repository.findByIdAndAtivoTrue(id);
+        if (opt.isEmpty()) {
+            return ResponseEntity.notFound().build();
+        }
+
+        var conserto = opt.get();
+        // Atualiza os campos com os dados do request
+        conserto.setDataEntrada(request.dataEntrada());
+        conserto.setDataSaida(request.dataSaida());
+        conserto.setMecanicoNome(request.mecanicoNome());
+        conserto.setMecanicoAnosExperiencia(request.mecanicoAnosExperiencia());
+        conserto.setVeiculoMarca(request.veiculoMarca());
+        conserto.setVeiculoModelo(request.veiculoModelo());
+        conserto.setVeiculoAno(request.veiculoAno());
+        conserto.setVeiculoCor(request.veiculoCor());
+
+        return ResponseEntity.ok(ConsertoResponse.fromEntity(conserto));
+    }
+
     // DELETE lógico — marca ativo=false
     @DeleteMapping("/{id}")
     @jakarta.transaction.Transactional
