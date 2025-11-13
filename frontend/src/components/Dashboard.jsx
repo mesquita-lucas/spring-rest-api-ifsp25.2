@@ -31,6 +31,10 @@ function Dashboard({ username, onLogout }) {
       setTotalPages(data.totalPages || 0);
       setTotalElements(data.totalElements || 0);
     } catch (err) {
+      if (err.response?.status === 401) {
+        handleLogout();
+        return;
+      }
       setError('Erro ao carregar consertos');
       console.error(err);
     } finally {
@@ -52,6 +56,10 @@ function Dashboard({ username, onLogout }) {
       setTotalPages(data.totalPages || 0);
       setTotalElements(data.totalElements || 0);
     } catch (err) {
+      if (err.response?.status === 401) {
+        handleLogout();
+        return;
+      }
       setError('Erro ao buscar consertos');
     } finally {
       setLoading(false);
@@ -69,6 +77,10 @@ function Dashboard({ username, onLogout }) {
       loadConsertos();
       setTimeout(() => setSuccess(''), 3000);
     } catch (err) {
+      if (err.response?.status === 401) {
+        handleLogout();
+        return;
+      }
       setError(err.response?.data?.message || 'Erro ao criar conserto');
     } finally {
       setLoading(false);
@@ -87,6 +99,10 @@ function Dashboard({ username, onLogout }) {
       loadConsertos();
       setTimeout(() => setSuccess(''), 3000);
     } catch (err) {
+      if (err.response?.status === 401) {
+        handleLogout();
+        return;
+      }
       setError(err.response?.data?.message || 'Erro ao atualizar conserto');
     } finally {
       setLoading(false);
@@ -107,6 +123,10 @@ function Dashboard({ username, onLogout }) {
       loadConsertos();
       setTimeout(() => setSuccess(''), 3000);
     } catch (err) {
+      if (err.response?.status === 401) {
+        handleLogout();
+        return;
+      }
       setError('Erro ao excluir conserto');
     } finally {
       setLoading(false);

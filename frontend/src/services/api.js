@@ -16,13 +16,51 @@ api.interceptors.request.use((config) => {
   return config;
 });
 
+// Interceptor para tratar erros de autenticação
+api.interceptors.response.use(
+  (response) => response,
+  (error) => {
+    if (error.response?.status === 401) {
+      // Limpa credenciais inválidas
+      localStorage.removeItem('auth');
+      localStorage.removeItem('username');
+    }
+    return Promise.reject(error);
+  }
+);
+
 // Serviço de autenticação
 export const authService = {
-  login: (username, password) => {
-    const encoded = btoa(`${username}:${password}`);
-    localStorage.setItem('auth', encoded);
-    localStorage.setItem('username', username);
-    return { success: true, username };
+  login: async (username, password) => {
+    try {
+      const encoded = btoa(`${username}:${password}`);
+      
+      // Testa as credenciais fazendo uma requisição ao backend
+      const testApi = axios.create({
+        baseURL: '/api',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Basic ${encoded}`
+        },
+      });
+      
+      // Faz uma requisição de teste
+      await testApi.get('/consertos?page=0&size=1');
+      
+      // Se chegou aqui, as credenciais são válidas
+      localStorage.setItem('auth', encoded);
+      localStorage.setItem('username', username);
+      return { success: true, username };
+    } catch (error) {
+      // Limpa qualquer credencial anterior
+      localStorage.removeItem('auth');
+      localStorage.removeItem('username');
+      
+      if (error.response?.status === 401) {
+        throw new Error('Usuário ou senha inválidos');
+      }
+      throw new Error('Erro ao fazer login. Tente novamente.');
+    }
   },
   
   logout: () => {

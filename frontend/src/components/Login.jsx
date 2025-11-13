@@ -6,8 +6,9 @@ function Login({ onLogin }) {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
+  const [loading, setLoading] = useState(false);
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     setError('');
 
@@ -16,11 +17,14 @@ function Login({ onLogin }) {
       return;
     }
 
+    setLoading(true);
     try {
-      const result = authService.login(username, password);
+      const result = await authService.login(username, password);
       onLogin(result.username);
     } catch (err) {
-      setError('Erro ao fazer login');
+      setError(err.message || 'Erro ao fazer login');
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -58,8 +62,8 @@ function Login({ onLogin }) {
 
           {error && <div className="error-message">{error}</div>}
 
-          <button type="submit" className="btn-login">
-            Entrar
+          <button type="submit" className="btn-login" disabled={loading}>
+            {loading ? 'Entrando...' : 'Entrar'}
           </button>
         </form>
 
