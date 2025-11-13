@@ -29,12 +29,91 @@ function ConsertoForm({ conserto, onSubmit, onCancel, loading }) {
     }
   }, [conserto]);
 
+  const formatDate = (value) => {
+    // Remove tudo exceto números
+    const numbers = value.replace(/\D/g, '');
+    
+    if (numbers.length === 0) return '';
+    
+    let day = numbers.slice(0, 2);
+    let month = numbers.slice(2, 4);
+    let year = numbers.slice(4, 8);
+    
+    // Valida dia (01-31)
+    if (day.length === 1) {
+      // Se o primeiro dígito for maior que 3, adiciona 0 na frente
+      if (parseInt(day) > 3) {
+        day = '0' + day;
+      }
+    } else if (day.length === 2) {
+      const dayNum = parseInt(day);
+      if (dayNum === 0) {
+        day = '01';
+      } else if (dayNum > 31) {
+        day = '31';
+      }
+    }
+    
+    // Valida mês (01-12)
+    if (month.length === 1) {
+      // Se o primeiro dígito for maior que 1, adiciona 0 na frente
+      if (parseInt(month) > 1) {
+        month = '0' + month;
+      }
+    } else if (month.length === 2) {
+      const monthNum = parseInt(month);
+      if (monthNum === 0) {
+        month = '01';
+      } else if (monthNum > 12) {
+        month = '12';
+      }
+    }
+    
+    // Monta a data formatada
+    let formatted = day;
+    if (numbers.length >= 3) {
+      formatted += '/' + month;
+    }
+    if (numbers.length >= 5) {
+      formatted += '/' + year;
+    }
+    
+    return formatted;
+  };
+
   const handleChange = (e) => {
     const { name, value } = e.target;
-    setFormData(prev => ({
-      ...prev,
-      [name]: value
-    }));
+    
+    // Máscaras e validações específicas por campo
+    if (name === 'dataEntrada' || name === 'dataSaida') {
+      // Aplica máscara de data dd/mm/aaaa
+      const formatted = formatDate(value);
+      setFormData(prev => ({
+        ...prev,
+        [name]: formatted
+      }));
+    } else if (name === 'veiculoAno') {
+      // Remove caracteres não numéricos e limita a 4 dígitos
+      const sanitized = value.replace(/\D/g, '').slice(0, 4);
+      setFormData(prev => ({
+        ...prev,
+        [name]: sanitized
+      }));
+    } else if (name === 'mecanicoAnosExperiencia') {
+      // Remove caracteres não numéricos e limita a 100
+      const sanitized = value.replace(/\D/g, '');
+      const limited = sanitized ? Math.min(parseInt(sanitized), 100).toString() : '';
+      setFormData(prev => ({
+        ...prev,
+        [name]: limited
+      }));
+    } else {
+      setFormData(prev => ({
+        ...prev,
+        [name]: value
+      }));
+    }
+    
     // Limpa erro do campo
     if (errors[name]) {
       setErrors(prev => ({ ...prev, [name]: '' }));
@@ -43,17 +122,50 @@ function ConsertoForm({ conserto, onSubmit, onCancel, loading }) {
 
   const validateForm = () => {
     const newErrors = {};
+    const currentYear = new Date().getFullYear();
+    const currentDate = new Date();
 
     // Validação de data (dd/mm/aaaa)
     const dateRegex = /^\d{2}\/\d{2}\/\d{4}$/;
+    
+    // Validação de Data Entrada
     if (!formData.dataEntrada) {
       newErrors.dataEntrada = 'Data de entrada é obrigatória';
     } else if (!dateRegex.test(formData.dataEntrada)) {
       newErrors.dataEntrada = 'Formato deve ser dd/mm/aaaa';
+    } else {
+      const [dia, mes, ano] = formData.dataEntrada.split('/').map(Number);
+      const dataEntrada = new Date(ano, mes - 1, dia);
+      const dataMinima = new Date(2015, 0, 1); // 01/01/2015
+      
+      if (dataEntrada < dataMinima) {
+        newErrors.dataEntrada = 'Data mínima: 01/01/2015';
+      } else if (dataEntrada > currentDate) {
+        newErrors.dataEntrada = 'Data não pode ser futura';
+      }
     }
 
+    // Validação de Data Saída
     if (formData.dataSaida && !dateRegex.test(formData.dataSaida)) {
       newErrors.dataSaida = 'Formato deve ser dd/mm/aaaa';
+    } else if (formData.dataSaida) {
+      const [dia, mes, ano] = formData.dataSaida.split('/').map(Number);
+      const dataSaida = new Date(ano, mes - 1, dia);
+      const dataMaxima = new Date(currentYear + 1, 11, 31); // 31/12/(ano atual + 1)
+      
+      if (dataSaida > dataMaxima) {
+        newErrors.dataSaida = `Data máxima: 31/12/${currentYear + 1}`;
+      }
+      
+      // Valida se data de saída é posterior à data de entrada
+      if (formData.dataEntrada && dateRegex.test(formData.dataEntrada)) {
+        const [diaEnt, mesEnt, anoEnt] = formData.dataEntrada.split('/').map(Number);
+        const dataEntrada = new Date(anoEnt, mesEnt - 1, diaEnt);
+        
+        if (dataSaida < dataEntrada) {
+          newErrors.dataSaida = 'Data de saída deve ser posterior à entrada';
+        }
+      }
     }
 
     // Validação de mecânico
@@ -61,6 +173,14 @@ function ConsertoForm({ conserto, onSubmit, onCancel, loading }) {
       newErrors.mecanicoNome = 'Nome do mecânico é obrigatório';
     } else if (formData.mecanicoNome.length > 120) {
       newErrors.mecanicoNome = 'Máximo 120 caracteres';
+    }
+
+    // Validação de anos de experiência (máximo 100)
+    if (formData.mecanicoAnosExperiencia) {
+      const anos = parseInt(formData.mecanicoAnosExperiencia);
+      if (anos > 100) {
+        newErrors.mecanicoAnosExperiencia = 'Máximo 100 anos';
+      }
     }
 
     // Validação de veículo
@@ -76,12 +196,22 @@ function ConsertoForm({ conserto, onSubmit, onCancel, loading }) {
       newErrors.veiculoModelo = 'Máximo 120 caracteres';
     }
 
-    // Validação de ano (aaaa)
+    // Validação de ano do veículo (1886 até ano atual + 1)
     const yearRegex = /^\d{4}$/;
     if (!formData.veiculoAno) {
       newErrors.veiculoAno = 'Ano do veículo é obrigatório';
     } else if (!yearRegex.test(formData.veiculoAno)) {
       newErrors.veiculoAno = 'Formato deve ser aaaa';
+    } else {
+      const ano = parseInt(formData.veiculoAno);
+      const anoMinimo = 1886; // Primeiro automóvel
+      const anoMaximo = currentYear + 1; // Permite pré-lançamentos
+      
+      if (ano < anoMinimo) {
+        newErrors.veiculoAno = `Ano mínimo: ${anoMinimo}`;
+      } else if (ano > anoMaximo) {
+        newErrors.veiculoAno = `Ano máximo: ${anoMaximo}`;
+      }
     }
 
     setErrors(newErrors);
@@ -95,11 +225,21 @@ function ConsertoForm({ conserto, onSubmit, onCancel, loading }) {
       return;
     }
 
-    // Converte anos de experiência para número ou null
+    // Prepara dados para envio
     const dataToSubmit = {
-      ...formData,
+      dataEntrada: formData.dataEntrada.trim(),
+      dataSaida: formData.dataSaida && formData.dataSaida.trim() !== '' 
+        ? formData.dataSaida.trim() 
+        : null,
+      mecanicoNome: formData.mecanicoNome.trim(),
       mecanicoAnosExperiencia: formData.mecanicoAnosExperiencia 
         ? parseInt(formData.mecanicoAnosExperiencia) 
+        : null,
+      veiculoMarca: formData.veiculoMarca.trim(),
+      veiculoModelo: formData.veiculoModelo.trim(),
+      veiculoAno: formData.veiculoAno.trim(),
+      veiculoCor: formData.veiculoCor && formData.veiculoCor.trim() !== '' 
+        ? formData.veiculoCor.trim() 
         : null,
     };
 
@@ -123,8 +263,9 @@ function ConsertoForm({ conserto, onSubmit, onCancel, loading }) {
               name="dataEntrada"
               value={formData.dataEntrada}
               onChange={handleChange}
-              placeholder="dd/mm/aaaa"
+              placeholder="dd/mm/aaaa (mín: 01/01/2015)"
               disabled={loading}
+              maxLength={10}
             />
             {errors.dataEntrada && <span className="error">{errors.dataEntrada}</span>}
           </div>
@@ -136,8 +277,9 @@ function ConsertoForm({ conserto, onSubmit, onCancel, loading }) {
               name="dataSaida"
               value={formData.dataSaida}
               onChange={handleChange}
-              placeholder="dd/mm/aaaa"
+              placeholder={`dd/mm/aaaa (máx: 31/12/${new Date().getFullYear() + 1})`}
               disabled={loading}
+              maxLength={10}
             />
             {errors.dataSaida && <span className="error">{errors.dataSaida}</span>}
           </div>
@@ -161,14 +303,16 @@ function ConsertoForm({ conserto, onSubmit, onCancel, loading }) {
           <div className="form-group">
             <label>Anos de Experiência:</label>
             <input
-              type="number"
+              type="text"
               name="mecanicoAnosExperiencia"
               value={formData.mecanicoAnosExperiencia}
               onChange={handleChange}
-              placeholder="Ex: 5"
+              placeholder="Ex: 5 (máx: 100)"
               disabled={loading}
-              min="0"
+              inputMode="numeric"
+              maxLength={3}
             />
+            {errors.mecanicoAnosExperiencia && <span className="error">{errors.mecanicoAnosExperiencia}</span>}
           </div>
         </div>
 
@@ -210,9 +354,11 @@ function ConsertoForm({ conserto, onSubmit, onCancel, loading }) {
               name="veiculoAno"
               value={formData.veiculoAno}
               onChange={handleChange}
-              placeholder="aaaa (Ex: 2020)"
+              placeholder={`aaaa (1886-${new Date().getFullYear() + 1})`}
               disabled={loading}
               maxLength={4}
+              inputMode="numeric"
+              pattern="\d{4}"
             />
             {errors.veiculoAno && <span className="error">{errors.veiculoAno}</span>}
           </div>

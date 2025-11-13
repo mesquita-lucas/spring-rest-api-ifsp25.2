@@ -1,15 +1,97 @@
 # Spring REST API – Sistema de Consertos de Veículos
 
-API REST desenvolvida em Spring Boot para gerenciar consertos de veículos conforme requisitos das Avaliações 1, 2 e 3 do curso.
+API REST desenvolvida em Spring Boot para gerenciar consertos de veículos conforme requisitos das Avaliações 1, 2, 3 e Spring Security do curso.
+
+---
+
+## 📦 O QUE ESTAMOS ENTREGANDO HOJE
+
+### ✅ Backend Completo e Funcional
+
+**Todas as avaliações implementadas e testadas:**
+
+1. **Avaliação 1** - JPA, Modelagem e POST
+2. **Avaliação 2** - Validações, Paginação e Buscas
+3. **Avaliação 3** - CRUD Completo com Exclusão Lógica
+4. **Spring Security** - Autenticação e Autorização
+
+**Tecnologias:**
+- ✅ Spring Boot 3.5.6
+- ✅ Spring Data JPA
+- ✅ Spring Security (Basic Auth)
+- ✅ Bean Validation
+- ✅ H2 Database
+- ✅ Flyway Migrations
+- ✅ Lombok
+
+**Pronto para uso:**
+- API REST totalmente funcional
+- Documentação completa
+- Script de testes automatizado
+- H2 Console para inspeção do banco
+
+---
+
+## 🎁 EXTRA - Frontend Web Interativo
+
+### Interface Gráfica Completa (Para o Professor Brincar!)
+
+**O que desenvolvemos além do requisito:**
+
+Um **frontend web moderno e completo** para facilitar a demonstração e teste da API!
+
+**Recursos implementados:**
+- ✅ **Dashboard interativo** com listagem paginada
+- ✅ **Formulários com validação em tempo real**
+- ✅ **Máscaras automáticas** para datas e campos numéricos
+- ✅ **Sistema de login** integrado com Spring Security
+- ✅ **Busca e filtros** por marca e modelo
+- ✅ **CRUD completo** (criar, editar, excluir)
+- ✅ **Feedback visual** para todas as operações
+- ✅ **Design responsivo** e intuitivo
+
+**Validações avançadas no frontend:**
+- Data Entrada: mínima 01/01/2015, máxima data atual
+- Data Saída: máxima 1 ano à frente da data atual
+- Anos de Experiência: máximo 100 anos
+- Ano do Veículo: 1886 (primeiro automóvel) até ano atual + 1
+- Máscaras automáticas para dd/mm/aaaa
+
+**Stack Frontend:**
+- React 19.2.0
+- Vite 7.2.2
+- Axios 1.13.2
+- CSS moderno e responsivo
+
+**Como executar o frontend:**
+```bash
+cd frontend
+npm install
+npm run dev
+```
+Acesse: http://localhost:3000
+
+**Credenciais para teste:**
+- **Admin:** admin / admin123 (pode criar, editar, excluir)
+- **User:** user / user123 (apenas visualizar)
+
+> 🎯 **Objetivo:** Facilitar a demonstração e avaliação do projeto com uma interface visual completa!
 
 ## 📋 Índice
+
+**Backend (Entrega Oficial):**
 - [Tecnologias Utilizadas](#tecnologias-utilizadas)
 - [Requisitos do Sistema](#requisitos-do-sistema)
-- [Como Executar](#como-executar)
+- [Como Executar o Backend](#como-executar-o-backend)
 - [Avaliações Implementadas](#avaliações-implementadas)
 - [Endpoints da API](#endpoints-da-api)
 - [Autenticação e Segurança](#autenticação-e-segurança)
 - [Exemplos de Uso](#exemplos-de-uso)
+- [Testes Automatizados](#testes-automatizados)
+
+**Frontend (Extra - Para Demonstração):**
+- [Como Executar o Frontend](#como-executar-o-frontend)
+- [Funcionalidades do Frontend](#funcionalidades-do-frontend)
 - [Estrutura do Projeto](#estrutura-do-projeto)
 
 ## 🚀 Tecnologias Utilizadas
@@ -31,7 +113,7 @@ API REST desenvolvida em Spring Boot para gerenciar consertos de veículos confo
 - **Maven 3.9+**
 - **IDE** com suporte a Annotation Processing (para Lombok)
 
-## ▶️ Como Executar
+## ▶️ Como Executar o Backend
 
 ### No Windows:
 ```cmd
@@ -277,44 +359,99 @@ curl -u admin:admin123 -X POST http://localhost:8080/consertos \
 
 ---
 
-## 🌟 PLUS - Front-end em Desenvolvimento (Branch `dev`)
+## 🧪 Testes Automatizados
 
-### 💻 Interface Web Integrada
+### Script Completo de Testes
 
-Estamos desenvolvendo uma **interface web moderna** para facilitar a interação com a API! 
+Incluímos um script `test-endpoints.bat` (Windows) que testa todos os endpoints automaticamente:
 
-**Recursos planejados:**
-- ✅ **Dashboard intuitivo** para visualização de consertos
-- ✅ **Formulários validados** para cadastro e edição
-- ✅ **Sistema de autenticação** integrado com Spring Security
-- ✅ **Filtros e busca avançada** por marca, modelo e período
-- ✅ **Design responsivo** (mobile-friendly)
-- ✅ **Feedback visual** para todas as operações (success/error)
+```bash
+test-endpoints.bat
+```
 
-**Stack tecnológico do front-end:**
-- **React** ou **Vue.js** para interface dinâmica
-- **Axios** para integração com API REST
-- **TailwindCSS** ou **Material-UI** para estilização
-- **JWT (futuro)** para autenticação mais moderna
+**O que o script testa:**
+1. ✅ POST - Criação de conserto com validação
+2. ✅ GET paginado - Lista todos os consertos
+3. ✅ GET por ID - Busca específica
+4. ✅ GET filtrado - Busca por marca e modelo
+5. ✅ PUT - Atualização de conserto
+6. ✅ DELETE - Exclusão lógica
+7. ✅ Validações - Testa campos obrigatórios
+8. ✅ Autenticação - Testa controle de acesso
 
-### 📅 Cronograma
+---
 
-**Próxima semana:**
-- Interface completa com todas as funcionalidades CRUD
-- Integração total com os endpoints da API
-- Tratamento de erros e validações no front-end
-- Deploy em branch `dev` para demonstração
+## 💻 Como Executar o Frontend
 
-### 🎯 Objetivo
+### Pré-requisitos
+- Node.js 18+ instalado
+- Backend rodando em http://localhost:8080
 
-Facilitar a **demonstração e avaliação** do projeto, oferecendo:
-1. Uma forma visual e intuitiva de testar todas as funcionalidades
-2. Validação prática da integração front-end + back-end
-3. Experiência de usuário completa (UX/UI)
+### Passos
 
-> 🚧 **Status:** Em desenvolvimento na branch `dev`  
-> 📅 **Previsão de entrega:** Próxima semana  
-> 🎯 **Disponibilidade para demonstração ao professor caso haja interesse**
+1. **Navegue até a pasta frontend:**
+```bash
+cd frontend
+```
+
+2. **Instale as dependências:**
+```bash
+npm install
+```
+
+3. **Inicie o servidor de desenvolvimento:**
+```bash
+npm run dev
+```
+
+4. **Acesse no navegador:**
+```
+http://localhost:3000
+```
+
+### Credenciais de Teste
+
+- **Administrador:** 
+  - Usuário: `admin`
+  - Senha: `admin123`
+  - Pode: criar, editar e excluir consertos
+
+- **Usuário comum:**
+  - Usuário: `user`
+  - Senha: `user123`
+  - Pode: apenas visualizar consertos
+
+---
+
+## ✨ Funcionalidades do Frontend
+
+### Dashboard Principal
+- 📊 Visualização paginada de todos os consertos
+- 🔍 Busca por marca e modelo do veículo
+- 🎨 Interface limpa e intuitiva
+- 📱 Design responsivo (funciona em mobile)
+
+### Formulário de Conserto
+- ✏️ Criação e edição de consertos
+- ✅ Validações em tempo real
+- 🎭 Máscaras automáticas para datas (dd/mm/aaaa)
+- 🚗 Validações específicas:
+  - **Data Entrada:** entre 01/01/2015 e hoje
+  - **Data Saída:** até 1 ano à frente
+  - **Anos Experiência:** máximo 100
+  - **Ano Veículo:** 1886 até 2026 (ano atual + 1)
+
+### Sistema de Autenticação
+- 🔐 Login integrado com Spring Security
+- 👤 Controle de permissões por role
+- 🚪 Logout seguro
+- 🔒 Proteção de rotas sensíveis
+
+### Feedback Visual
+- ✅ Mensagens de sucesso
+- ❌ Mensagens de erro
+- ⏳ Indicadores de carregamento
+- 🎨 Cores intuitivas para ações
 
 ---
 
@@ -383,6 +520,7 @@ curl -u admin:admin123 -X POST http://localhost:8080/consertos \
 
 ## 📁 Estrutura do Projeto
 
+### Backend
 ```
 src/
 └─ main/
@@ -402,6 +540,25 @@ src/
             ├─ V1__criar_tabela_conserto.sql
             ├─ V2__adicionar_cor_em_veiculo.sql
             └─ V3__add-column-ativo-conserto.sql
+```
+
+### Frontend (Extra)
+```
+frontend/
+├─ src/
+│   ├─ components/
+│   │   ├─ Dashboard.jsx          # Componente principal
+│   │   ├─ ConsertoForm.jsx       # Formulário com validações
+│   │   ├─ ConsertoList.jsx       # Lista de consertos
+│   │   ├─ SearchBar.jsx          # Barra de busca
+│   │   ├─ Login.jsx              # Tela de login
+│   │   └─ *.css                  # Estilos
+│   ├─ services/
+│   │   └─ api.js                 # Cliente HTTP (Axios)
+│   ├─ App.jsx                    # Componente raiz
+│   └─ main.jsx                   # Entry point
+├─ vite.config.js                 # Config Vite + Proxy
+└─ package.json                   # Dependências
 ```
 
 ---
@@ -430,17 +587,20 @@ src/
 
 ## 🎯 Status das Entregas
 
-### ✅ Avaliação 1 - COMPLETA
+### ✅ BACKEND - ENTREGA OFICIAL (COMPLETO)
+
+**Avaliação 1 - COMPLETA**
 - [x] Classes de domínio criadas
 - [x] POST implementado
+- [x] Migration V1
 
-### ✅ Avaliação 2 - COMPLETA  
+**Avaliação 2 - COMPLETA**  
 - [x] Validação com Bean Validation
 - [x] Migration V2 (cor do veículo)
 - [x] GET paginado
 - [x] GET parcial com filtros
 
-### ✅ Avaliação 3 - COMPLETA
+**Avaliação 3 - COMPLETA**
 - [x] Migration V3 (campo ativo)
 - [x] Repository filtra por ativo=true
 - [x] GET por ID
@@ -448,11 +608,55 @@ src/
 - [x] DELETE lógico
 - [x] Filtros consideram apenas ativos
 
-### ✅ Spring Security - COMPLETA
+**Spring Security - COMPLETA**
 - [x] Basic Authentication
 - [x] Controle de acesso por roles
-- [x] Usuários em memória
+- [x] Usuários em memória (admin/user)
 - [x] BCrypt para senhas
+- [x] Stateless sessions
+
+### 🎁 FRONTEND - EXTRA (BONUS)
+
+**Interface Web Completa**
+- [x] Dashboard com listagem paginada
+- [x] Formulários com validações avançadas
+- [x] Sistema de autenticação integrado
+- [x] Busca e filtros
+- [x] CRUD completo (criar, editar, excluir)
+- [x] Máscaras automáticas para datas
+- [x] Validações de regras de negócio
+- [x] Design responsivo
+- [x] Feedback visual (success/error)
+
+**Integração Frontend + Backend**
+- [x] Comunicação via Axios
+- [x] Proxy configurado (Vite)
+- [x] CORS configurado no backend
+- [x] Autenticação Basic Auth
+- [x] Tratamento de erros
+
+---
+
+## 📝 Notas Finais
+
+### Para o Professor
+
+**Entrega Oficial (Hoje):**
+- ✅ Backend completo com todas as avaliações implementadas
+- ✅ Spring Security configurado e funcional
+- ✅ Testes via script automatizado
+- ✅ Documentação completa
+
+**Extra - Frontend Web:**
+- 🎁 Interface gráfica completa para facilitar a demonstração
+- 🎯 Totalmente funcional e integrada com o backend
+- 🎨 Validações avançadas e máscaras automáticas
+- 💻 Disponível para demonstração se houver interesse
+
+**Como testar:**
+1. **Backend apenas:** Execute `mvnw.cmd spring-boot:run` e use Postman/curl
+2. **Backend + Frontend:** Execute o backend, depois `cd frontend && npm run dev`
+3. **Testes automatizados:** Execute `test-endpoints.bat`
 
 ---
 
